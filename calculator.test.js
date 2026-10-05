@@ -46,3 +46,10 @@ test('varias máquinas: escala ASIC, auxiliares individuales y mantenimiento; co
 test('cantidad inválida',()=>{
  for(const count of [0,-1,1.5,NaN,Infinity])assert.throws(()=>calculate({...defaults,count}));
 });
+test('inversión: cantidad por precio unitario; no modifica utilidad operativa',()=>{
+ const p={...defaults,count:3},r=calculate(p),changed=calculate({...p,unitCost:5000});
+ near(r.machineryUsd,8100);near(r.machineryBs,97200);
+ assert.deepEqual(r.basic,changed.basic);assert.deepEqual(r.full,changed.full);
+ near(calculate({...p,unitCost:0}).machineryUsd,0);
+ assert.throws(()=>calculate({...p,unitCost:-1}));
+});

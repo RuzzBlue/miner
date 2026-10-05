@@ -16,6 +16,10 @@ Servir los archivos por HTTP: los módulos JavaScript no funcionan abriendo inde
 
 ## Escenarios
 
+Cada sección permite restablecer solo sus valores de referencia; el botón general restablece todos, incluido el precio de compra. Cada campo incluye un enlace de consulta o una explicación para obtener los datos propios de la instalación. Los enlaces no importan valores automáticamente. DELAPAZ y la verificación de factura de AETN ayudan a consultar la categoría y consumo; la tarifa inicial sigue siendo la referencia de facturas aportada, no una tarifa oficial universal. Mempool permite consultar dificultad y bloques: no confundir subsidio con recompensa total ni comisiones BTC/bloque con sat/vB.
+
+Al final se calcula la compra de maquinaria: `cantidad × precio unitario USD`, convertido a Bs con el cambio seleccionado. Precio inicial US$2700 proporcionado por el usuario, editable, sin incluir transporte, importación, impuestos ni infraestructura. Esta inversión no cambia el cálculo de utilidad operativa.
+
 Los campos están agrupados en lugar, máquina, red y mercado, tamaño y período, y costos de operación. La cantidad debe ser un entero desde 1 y supone ASIC idénticos. Hashrate y potencia se ingresan por máquina. Ventilación por máquina y mantenimiento por máquina se multiplican; Internet, ventilación compartida y otros gastos se mantienen una sola vez. Pool es un porcentaje sobre la producción total; downtime es un porcentaje de tiempo común a toda la instalación. Los costos de mantenimiento siguen cobrando durante downtime. La ventilación compartida se apaga durante downtime.
 
 La comparación con una máquina adicional muestra la variación de utilidad operativa, sin inversión inicial. Ajusta los costos compartidos si el crecimiento exige otra conexión o más ventilación. Para maquinaria heterogénea, este modelo no reemplaza un cálculo individual por modelo.

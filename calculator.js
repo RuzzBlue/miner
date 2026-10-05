@@ -1,4 +1,4 @@
-export const defaults = {count:1,rate:1.0185,hash:245,watts:3675,difficulty:150,reward:3.125,fees:0,price:85000,exchange:12,days:30,pool:2,aux:200,sharedAux:0,internet:150,maintenance:100,downtime:5,other:0};
+export const defaults = {unitCost:2700,count:1,rate:1.0185,hash:245,watts:3675,difficulty:150,reward:3.125,fees:0,price:85000,exchange:12,days:30,pool:2,aux:200,sharedAux:0,internet:150,maintenance:100,downtime:5,other:0};
 export function calculate(p) {
   for (const key of Object.keys(defaults)) {
     if (!Number.isFinite(p[key]) || p[key]<0) throw new Error('Revisa los campos: deben ser números válidos y no negativos.');
@@ -13,5 +13,5 @@ export function calculate(p) {
     const electric=kwh*p.rate, net=bs-electric-fixed;
     return {btc,received,usd,bs,kwh,electric,fixed,net,netUsd:net/p.exchange,annual:net*365/p.days,breakEven:kwh ? (bs-fixed)/kwh:null,poolBtc:btc-received};
   };
-  return {btcDay,basic:scenario(1,0,0,0),full:scenario(1-p.downtime/100,p.pool,p.aux*p.count+p.sharedAux,p.internet+p.maintenance*p.count+p.other)};
+  return {btcDay,machineryUsd:p.count*p.unitCost,machineryBs:p.count*p.unitCost*p.exchange,basic:scenario(1,0,0,0),full:scenario(1-p.downtime/100,p.pool,p.aux*p.count+p.sharedAux,p.internet+p.maintenance*p.count+p.other)};
 }
