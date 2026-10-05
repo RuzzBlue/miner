@@ -16,6 +16,10 @@ Servir los archivos por HTTP: los módulos JavaScript no funcionan abriendo inde
 
 ## Escenarios
 
+Los campos están agrupados en lugar, máquina, red y mercado, tamaño y período, y costos de operación. La cantidad debe ser un entero desde 1 y supone ASIC idénticos. Hashrate y potencia se ingresan por máquina. Ventilación por máquina y mantenimiento por máquina se multiplican; Internet, ventilación compartida y otros gastos se mantienen una sola vez. Pool es un porcentaje sobre la producción total; downtime es un porcentaje de tiempo común a toda la instalación. Los costos de mantenimiento siguen cobrando durante downtime. La ventilación compartida se apaga durante downtime.
+
+La comparación con una máquina adicional muestra la variación de utilidad operativa, sin inversión inicial. Ajusta los costos compartidos si el crecimiento exige otra conexión o más ventilación. Para maquinaria heterogénea, este modelo no reemplaza un cálculo individual por modelo.
+
 - **Básico:** operación continua, BTC/día y período, valor USD/Bs, electricidad, utilidad y tarifa de equilibrio.
 - **Completo:** downtime, comisión pool, auxiliares y gastos fijos; BTC producido separado de BTC recibido; utilidad neta y proyección anual.
 
@@ -23,11 +27,13 @@ Un período equivale a los días seleccionados (30 por defecto). Los campos de g
 
 ## Fórmula y unidades
 
-`BTC/día = (TH/s × 10^12 × 86400 / (dificultad_billones × 10^12 × 2^32)) × (subsidio + comisiones_BTC_por_bloque)`.
+`BTC/día = (cantidad × TH/s_por_máquina × 10^12 × 86400 / (dificultad_billones × 10^12 × 2^32)) × (subsidio + comisiones_BTC_por_bloque)`.
 
 La dificultad se introduce en billones de escala española, es decir 10^12. No es la dificultad de shares del pool. La producción es una esperanza estadística, no una promesa de pago. Las comisiones de transacciones por bloque son un promedio opcional y se distinguen de la comisión del pool. El modelo supone que el pool remunera proporcionalmente el subsidio y las comisiones introducidas.
 
-`kWh = (W ASIC + W auxiliares) / 1000 × 24 × días × disponibilidad`.
+`kWh = ((W ASIC + W ventilación_por_máquina) × cantidad + W ventilación_compartida) / 1000 × 24 × días × disponibilidad`.
+
+`gastos = mantenimiento_por_máquina × cantidad + Internet + otros_compartidos`.
 
 `BTC recibido = BTC producido × (1 − pool/100)`.
 

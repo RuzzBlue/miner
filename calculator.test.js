@@ -34,3 +34,15 @@ test('subsidio y comisiones, cero hashrate, pérdidas',()=>{
  near(calculate({...defaults,hash:0}).basic.btc,0);
  assert.ok(calculate({...defaults,price:0}).full.breakEven<0);
 });
+test('varias máquinas: escala ASIC, auxiliares individuales y mantenimiento; conserva compartidos',()=>{
+ const p={...defaults,sharedAux:500,other:80};
+ const one=calculate(p),three=calculate({...p,count:3});
+ near(three.basic.btc,one.basic.btc*3);near(three.basic.kwh,one.basic.kwh*3);
+ near(three.full.kwh,(3675*3+200*3+500)/1000*24*30*.95);
+ near(three.full.fixed,150+100*3+80);
+ near(three.full.received,one.full.received*3);
+ near(three.full.net-one.full.net,2*(one.full.bs-(3675+200)/1000*24*30*.95*p.rate-100));
+});
+test('cantidad inválida',()=>{
+ for(const count of [0,-1,1.5,NaN,Infinity])assert.throws(()=>calculate({...defaults,count}));
+});
