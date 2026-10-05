@@ -2,7 +2,7 @@ import {calculate,defaults} from './calculator.js';
 const fields=[['rate','Electricidad','Bs/kWh','place'],['hash','Hashrate por máquina','TH/s','machine'],['watts','Consumo ASIC por máquina','W','machine'],['difficulty','Dificultad de red','× 10¹²','network'],['price','Precio de Bitcoin','USD/BTC','network'],['reward','Subsidio por bloque','BTC','network'],['fees','Comisiones de red por bloque','BTC','network'],['count','Cantidad de máquinas','ASIC','planning'],['exchange','Tipo de cambio','Bs/USD','planning'],['days','Días del período','días','planning'],['pool','Comisión del pool','%','operation'],['downtime','Tiempo apagado','%','operation'],['aux','Ventilación por máquina','W','operation'],['sharedAux','Ventilación compartida','W total','operation'],['maintenance','Mantenimiento por máquina / período','Bs','operation'],['internet','Internet total / período','Bs','operation'],['other','Otros gastos compartidos / período','Bs','operation']];
 fields.push(['unitCost','Precio de compra por Antminer','USD','investment']);
 const sources={
- rate:['DELAPAZ / verificar factura','https://www.aetn.gob.bo/acoe/Categorias/index/?sigla=DELAPAZ','Consulta tu categoría y factura; la tarifa final puede incluir bloques y cargos. El valor inicial proviene de tus facturas, no de una tarifa oficial única.'],
+ rate:['DELAPAZ','https://www.delapaz.bo/','Consulta tu categoría y factura; la tarifa final puede incluir bloques y cargos. El valor inicial proviene de tus facturas, no de una tarifa oficial única.'],
  hash:['Manual del ASIC','https://support.bitmain.com/hc/en-us','Busca el modelo y variante exactos; ingresa el hashrate de una máquina.'],
  watts:['Manual del ASIC','https://support.bitmain.com/hc/en-us','Consulta consumo nominal y contrástalo con un medidor en la instalación.'],
  difficulty:['Dificultad en mempool','https://mempool.space/mining','Usa la dificultad actual, no el porcentaje del próximo ajuste. Si figura en T, copia ese número en este campo de 10¹².'],
@@ -24,11 +24,11 @@ const sources={
 for(const [key,label,unit,group] of fields){
   const container=document.getElementById(`${group}-fields`);
   const [source,url,note]=sources[key];
-  container.insertAdjacentHTML('beforeend',`<div class="field"><label for="${key}">${label}<div class="input-wrap"><input form="inputs" id="${key}" name="${key}" type="number" min="${['difficulty','exchange'].includes(key)?'0.000001':['days','count'].includes(key)?'1':'0'}" ${['pool','downtime'].includes(key)?'max="100"':key==='days'?'max="366"':''} step="${key==='count'?'1':'any'}" value="${defaults[key]}" required><span>${unit}</span></div></label><a class="source-link" href="${url}" ${url.startsWith('https:')?'target="_blank" rel="noopener"':''}>${source} ↗</a><p class="field-note">${note}</p></div>`);
+  container.insertAdjacentHTML('beforeend',`<div class="field"><label for="${key}">${label}<div class="input-wrap"><input form="inputs" id="${key}" name="${key}" type="number" min="${['difficulty','exchange'].includes(key)?'0.000001':['days','count'].includes(key)?'1':'0'}" ${['pool','downtime'].includes(key)?'max="100"':key==='days'?'max="366"':''} step="${key==='count'?'1':'any'}" value="${defaults[key]}" required><span>${unit}</span></div></label><a class="source-link" href="${url}" ${url.startsWith('https:')?'target="_blank" rel="noopener"':''}>${source} ↗</a><details class="field-help"><summary>Detalle</summary><p class="field-note">${note}</p></details></div>`);
 }
 for(const group of new Set(fields.map(f=>f[3]))){
  const section=document.getElementById(`${group}-fields`).closest('section');
- section.insertAdjacentHTML('beforeend',`<button class="section-reset" type="button" data-reset="${group}">Restablecer esta sección</button>`);
+ section.querySelector('.section-title').insertAdjacentHTML('beforeend',`<button class="section-reset" type="button" data-reset="${group}">Restablecer</button>`);
 }
 document.getElementById('field-references').innerHTML=fields.filter(([key])=>sources[key][1].startsWith('#')).map(([key,label])=>`<details id="reference-${key}"><summary>${label}</summary><p>${sources[key][2]}</p></details>`).join('');
 const num=(v,d=2)=>new Intl.NumberFormat('es-BO',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
